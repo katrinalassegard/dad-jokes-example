@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dad Jokes for the Best Dad</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      font-family: 'Georgia', serif;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 50px 40px;
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .emoji {
+      font-size: 60px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      color: #888;
+      font-weight: normal;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    #joke {
+      font-size: 1.5rem;
+      color: #222;
+      line-height: 1.7;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+      transition: opacity 0.3s ease;
+    }
+
+    #joke.loading {
+      opacity: 0.3;
+      font-style: italic;
+      color: #999;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 16px 40px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 20px rgba(102,126,234,0.5);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(102,126,234,0.7);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #bbb;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="emoji">👨</div>
+    <h1>Dad Joke Generator</h1>
+    <p id="joke">Click the button for your first joke!</p>
+    <button onclick="getJoke()">Tell me a joke! 😂</button>
+    <p class="footer">Powered by icanhazdadjoke.com</p>
+  </div>
+
+  <script>
+    async function getJoke() {
+      const jokeEl = document.getElementById('joke');
+      jokeEl.textContent = 'Loading...';
+      jokeEl.classList.add('loading');
+
+      try {
+        const res = await fetch('https://icanhazdadjoke.com/', {
+          headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        jokeEl.classList.remove('loading');
+        jokeEl.textContent = data.joke;
+      } catch {
+        jokeEl.classList.remove('loading');
+        jokeEl.textContent = "Why can't you trust atoms? Because they make up everything! (offline fallback 😄)";
+      }
+    }
+  </script>
+</body>
+</html>
